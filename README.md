@@ -6,36 +6,36 @@ Feel free to use and modify the scripts as you like.
 
 ## INSTALL
 
-1) copy the scripts to the OpenVPN server, make them executable (chmod +x on_*.sh)
-2) Define them in the config:
+1. copy the scripts to the OpenVPN server, make them executable (chmod +x on_*.sh)
+2. Define them in the config:
 
-> script-security 2
->
-> client-connect /etc/openvpn/on_connect.sh
->
-> client-disconnect /etc/openvpn/on_disconnect.sh
+ > script-security 2
+ >
+ > client-connect /etc/openvpn/on_connect.sh
+ >
+ > client-disconnect /etc/openvpn/on_disconnect.sh
 
-3) configure sudo for the OpenVPN user. This was tested under CentOS, where OpenVPN is run under the user "nobody":
+3. configure sudo for the OpenVPN user. This was tested under CentOS, where OpenVPN is run under the user "nobody":
 
-create a file /etc/sudoers.d/openvpn_iptables with the following contents
+ create a file /etc/sudoers.d/openvpn_iptables with the following contents
 
-> Defaults:nobody !requiretty
-> 
-> nobody ALL = NOPASSWD: /sbin/iptables
+ > Defaults:nobody !requiretty
+ > 
+ > nobody ALL = NOPASSWD: /sbin/iptables
 
-this will allow the user "nobody" to run "sudo iptables" without a password
+ this will allow the user "nobody" to run "sudo iptables" without a password
 
-Under Debian, OpenVPN is run as root, so sudo directives can be removed alltogether from both scripts.
+ Under Debian, OpenVPN is run as root, so sudo directives can be removed alltogether from both scripts.
 
-4) (Centos/RHEL/Fedora only): configure SELinux to allow iptables execution 
-    a) disable enforcement temporarily:
-        `setenforce 0`
-    b) connect and disconnect a client, verify the log and run "iptables-save" to verify that rules are added and removed.
-    c) convert audit logs to the new policy:
+4. (Centos/RHEL/Fedora only): configure SELinux to allow iptables execution 
+ * disable enforcement temporarily:
+  `setenforce 0`
+ * connect and disconnect a client, verify the log and run "iptables-save" to verify that rules are added and removed.
+ * convert audit logs to the new policy:
         `grep openvpn /var/log/audit/audit.log | audit2allow -M openvpn_sudo_ipt`
-    d) install the policy
+ * install the policy
         `semodule -i openvpn_sudo_ipt.pp`
-    e) enable enforcement back:
+ * enable enforcement back:
         `setenforce 1`
 
 ## TROUBLESHOOTING
@@ -53,8 +53,8 @@ After running the on_connect.sh script, iptables should appear, as well as log e
 
 ## TODO
 
-*parse iroute directives
-*rethink file locking
+* parse iroute directives
+* rethink file locking
 
 ## License
 The scripts are in the Public Domain
